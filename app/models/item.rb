@@ -1,4 +1,6 @@
 class Item < ApplicationRecord
-  has_many :bookmarks, dependent: :destroy 
-  has_many :items,     dependent: :destroy  
+  belongs_to :item_post
+  has_many :bookmark, dependent: :destroy 
+  has_many :item,     dependent: :destroy
+  has_many :item,     dependent: :destroy
 end

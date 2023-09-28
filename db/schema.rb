@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_28_064756) do
+ActiveRecord::Schema.define(version: 2023_09_28_115935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 2023_09_28_064756) do
     t.index ["user_id"], name: "index_item_posts_on_user_id"
   end
 
+  create_table "item_ranks", force: :cascade do |t|
+    t.bigint "item_post_id", null: false
+    t.bigint "item_id", null: false
+    t.integer "rank"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_id"], name: "index_item_ranks_on_item_id"
+    t.index ["item_post_id"], name: "index_item_ranks_on_item_post_id"
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.integer "price"
@@ -65,4 +75,6 @@ ActiveRecord::Schema.define(version: 2023_09_28_064756) do
   add_foreign_key "comments", "items"
   add_foreign_key "comments", "users"
   add_foreign_key "item_posts", "users"
+  add_foreign_key "item_ranks", "item_posts"
+  add_foreign_key "item_ranks", "items"
 end
