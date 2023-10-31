@@ -1,0 +1,15 @@
+<h1>検索結果</h1>
+
+<%= form_with(url: search_items_path, method: :get) do |form| %>
+  <%= form.text_field :keyword, placeholder: 'キーワードを入力' %>
+  <%= form.submit '検索' %>
+<% end %>
+
+<ul>
+  <% @search_results.first(10).each do |item| %>
+    <li>
+      <%= image_tag(item['mediumImageUrls'][0], alt: item['itemName']) %>
+      <%= "#{item['itemName']}, #{item['itemPrice']} yen" %>
+    </li>
+  <% end %>
+</ul>

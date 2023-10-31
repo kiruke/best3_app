@@ -56,3 +56,10 @@ gem "sentry-ruby", "~> 5.11"
 gem "sentry-rails", "~> 5.11"
 
 gem 'rack-mini-profiler', '~> 2.0'
+# HTTPクライアント
+gem 'faraday'
+# 環境変数を使えるようにする
+gem 'dotenv-rails'
+# 楽天API用SDK
+gem 'rakuten_web_service'
+
