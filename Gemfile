@@ -62,4 +62,5 @@ gem 'faraday'
 gem 'dotenv-rails'
 # 楽天API用SDK
 gem 'rakuten_web_service'
-
+# tailwind
+gem 'tailwindcss-rails'

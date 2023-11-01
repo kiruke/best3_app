@@ -8,11 +8,6 @@
 <ul>
   <% @search_results.first(10).each do |item| %>
     <li>
-      <%
-=begin%>
- <%= image_tag(item['mediumImageUrls'][0], alt: item['itemName']) %> 
-<%
-=end%>
       <%= link_to(image_tag(item['mediumImageUrls'][0], alt: item['itemName']), item['itemUrl'], target: '_blank') %>
       <%= "#{item['itemName']}, #{item['itemPrice']} yen" %>
     </li>
