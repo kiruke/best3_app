@@ -1,4 +1,6 @@
-<h1>検索結果</h1>
+<%
+=begin%>
+ <h1>検索結果</h1>
 
 <%= form_with(url: search_items_path, method: :get) do |f| %>
   <%= f.text_field :keyword, value: params[:keyword], placeholder: 'キーワードを入力' %>
@@ -10,6 +12,32 @@
     <li>
       <%= link_to(image_tag(item['mediumImageUrls'][0], alt: item['itemName']), item['itemUrl'], target: '_blank') %>
       <%= "#{item['itemName']}, #{item['itemPrice']} yen" %>
+    </li>
+  <% end %>
+</ul> 
+<%
+=end%>
+
+<!-- app/views/items/search.html.erb -->
+
+<h1 class="text-3xl font-semibold mb-4">検索結果</h1>
+
+<%= form_with(url: search_items_path, method: :get, class: "mb-4") do |f| %>
+  <div class="flex items-center space-x-2">
+    <%= f.text_field :keyword, value: params[:keyword], placeholder: 'キーワードを入力', class: "py-2 px-4 rounded-lg bg-gray-100" %>
+    <%= f.submit '検索', class: "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg" %>
+  </div>
+<% end %>
+
+<ul>
+  <% @search_results.first(10).each do |item| %>
+    <li>
+      <a href="<%= item['itemUrl'] %>" target="_blank" class="group">
+        <div class="group-hover:bg-gray-200 transition duration-300 ease-in-out">
+          <%= image_tag(item['mediumImageUrls'][0], alt: item['itemName'], class: "w-full") %>
+        </div>
+        <p class="text-center"><%= "#{item['itemName']}, #{item['itemPrice']} yen" %></p>
+      </a>
     </li>
   <% end %>
 </ul>
