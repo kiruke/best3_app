@@ -44,10 +44,23 @@ RUN bundle install && \
 # Install node modules
 COPY --link .yarnrc package.json yarn.lock ./
 COPY --link .yarn/releases/* .yarn/releases/
-RUN yarn install --frozen-lockfile
+
+# Add the following lines to fix fsevents error
+# Remove problematic dependencies
+# RUN yarn remove fsevents
+
+RUN yarn install --frozen-lockfile --ignore-engines
 
 # Copy application code
 COPY --link . .
+
+# Create a script to run the Rails server with file change detection
+RUN echo '#!/bin/bash' > /rails/start.sh
+RUN echo 'bundle exec rails server -b 0.0.0.0' >> /rails/start.sh
+RUN chmod +x /rails/start.sh
+
+# Entrypoint to run the start script
+ENTRYPOINT ["/rails/start.sh"]
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
