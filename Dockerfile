@@ -27,7 +27,7 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential curl libpq-dev node-gyp pkg-config python-is-python3
 
 # Install JavaScript dependencies
-ARG NODE_VERSION=15.14.0
+ARG NODE_VERSION=16.14.0
 ARG YARN_VERSION=1.22.18
 ENV PATH=/usr/local/node/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
@@ -42,12 +42,25 @@ RUN bundle install && \
     rm -rf ~/.bundle/ $BUNDLE_PATH/ruby/*/cache $BUNDLE_PATH/ruby/*/bundler/gems/*/.git
 
 # Install node modules
-COPY --link .yarnrc package.json yarn.lock ./
+COPY --link .yarnrc package.json ./
 COPY --link .yarn/releases/* .yarn/releases/
-RUN yarn install --frozen-lockfile
+
+# Add the following lines to fix fsevents error
+# Remove problematic dependencies
+# RUN yarn remove fsevents
+
+RUN yarn install --frozen-lockfile --ignore-engines
 
 # Copy application code
 COPY --link . .
+
+# Create a script to run the Rails server with file change detection
+RUN echo '#!/bin/bash' > /rails/start.sh
+RUN echo 'bundle exec rails server -b 0.0.0.0' >> /rails/start.sh
+RUN chmod +x /rails/start.sh
+
+# Entrypoint to run the start script
+ENTRYPOINT ["/rails/start.sh"]
 
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
