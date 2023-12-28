@@ -1,43 +1,32 @@
-<%
-=begin%>
- <h1>検索結果</h1>
-
-<%= form_with(url: search_items_path, method: :get) do |f| %>
-  <%= f.text_field :keyword, value: params[:keyword], placeholder: 'キーワードを入力' %>
-  <%= f.submit '検索' %>
-<% end %>
-
-<ul>
-  <% @search_results.first(10).each do |item| %>
-    <li>
-      <%= link_to(image_tag(item['mediumImageUrls'][0], alt: item['itemName']), item['itemUrl'], target: '_blank') %>
-      <%= "#{item['itemName']}, #{item['itemPrice']} yen" %>
-    </li>
-  <% end %>
-</ul> 
-<%
-=end%>
-
-<!-- app/views/items/search.html.erb -->
+<!-- CSSをリンクする -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
 <h1 class="text-3xl font-semibold mb-4">検索結果</h1>
 
 <%= form_with(url: search_items_path, method: :get, class: "mb-4") do |f| %>
   <div class="flex items-center space-x-2">
     <%= f.text_field :keyword, value: params[:keyword], placeholder: 'キーワードを入力', class: "py-2 px-4 rounded-lg bg-gray-100" %>
-    <%= f.submit '検索', class: "bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg" %>
+    <%= f.submit '検索', class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
   </div>
 <% end %>
 
-<ul>
+<ul class="grid grid-cols-2 md:grid-cols-4 gap-4">
   <% @search_results.first(10).each do |item| %>
     <li>
-      <a href="<%= item['itemUrl'] %>" target="_blank" class="group">
-        <div class="group-hover:bg-gray-200 transition duration-300 ease-in-out">
+      <a href="<%= item['itemUrl'] %>" target="_blank" class="group flex flex-col items-center">
+        <div class="transition duration-300 ease-in-out">
           <%= image_tag(item['mediumImageUrls'][0], alt: item['itemName'], class: "w-full") %>
         </div>
-        <p class="text-center"><%= "#{item['itemName']}, #{item['itemPrice']} yen" %></p>
+        <p class="text-center text-sm mt-2 hover:underline hover:text-red-500"><%= item['itemName'] %></p>
+        <p class="text-center text-sm mt-1"><%= "#{item['itemPrice']} 円" %></p>
       </a>
     </li>
   <% end %>
 </ul>
+
+<style>
+  /* カーソルを合わせたときに半透明にする */
+  .group:hover > div {
+    opacity: 0.8;
+  }
+</style>
